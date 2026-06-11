@@ -20,6 +20,15 @@ dtmfmode=rfc2833
 disallow=all
 allow=ulaw
 
+[1003]
+type=friend
+secret=pass1001
+host=dynamic
+context=default
+dtmfmode=rfc2833
+disallow=all
+allow=ulaw
+
 ;------------------------------------------
 ; Extension 1002 = Zoiper on real phone
 ;------------------------------------------
