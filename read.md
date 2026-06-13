@@ -1,4 +1,4 @@
-# 🚀 Asterisk Docker Quick Start
+# Asterisk Docker Quick Start
 
 ## Running Asterisk
 
@@ -16,25 +16,23 @@ What this does:
 
 ## Important Files
 
-- `config/pjsip.conf` - Phone registration (who can connect)
+- `config/pjsip.conf` - Phone registration and transport
 - `config/extensions.conf` - Dialplan and call routing
 - `config/rtp.conf` - Audio ports
 
-## 📚 Helpful Guides
+## Helpful Guides
 
-### When You Change WiFi/Network:
-- **READ THIS:** `NETWORK-SETUP-GUIDE.md` - Complete network configuration guide
-- **QUICK REF:** `QUICK-CHECKLIST.md` - Fast checklist when switching networks
-- **RUN THIS:** `network-helper.ps1` - Automatic script that shows what to configure
+### When You Change Wi-Fi or Network:
+- `NETWORK-SETUP-GUIDE.md` - Complete network configuration guide
+- `network-helper.ps1` - Automatic script that shows what to configure
 
 ### Usage:
 ```powershell
-# Find out what to configure after network change
 .\network-helper.ps1
 ```
 
-## 🎯 Quick Tips
+## Quick Tips
 
-- **Phone on same PC:** Use `localhost` as server (never changes!)
-- **Phone on other device:** Use your PC's IP address (run `ipconfig` to find it)
-- **After network change:** Only update external phone configs, Asterisk files don't need changes!
+- **Phone on the same PC:** Use `localhost` as the server.
+- **Phone on another device:** Use the active adapter IP from `ipconfig`.
+- **After network change:** Keep Asterisk bound to `0.0.0.0` in `pjsip.conf`; update only the phone client server address if needed.
