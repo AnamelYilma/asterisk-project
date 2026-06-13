@@ -1,0 +1,140 @@
+# 📱 MicroSIP Quick Setup - One Page Cheat Sheet
+
+## 🎯 FASTEST SETUP (Copy & Paste These Values)
+
+### Extension 1001 (MicroSIP on Same PC)
+
+```
+┌────────────────────────────────────┐
+│ ADD ACCOUNT IN MICROSIP            │
+├────────────────────────────────────┤
+│                                    │
+│ Account Name:  Asterisk 1001       │
+│                                    │
+│ SIP Server:    localhost           │
+│                                    │
+│ Username:      1001                │
+│                                    │
+│ Password:      pass1001            │
+│                                    │
+│ Domain:        localhost           │
+│                                    │
+│ Login:         1001                │
+│                                    │
+│ ─────────────────────────────────  │
+│ NETWORK TAB:                       │
+│                                    │
+│ Transport:     UDP                 │
+│ Port:          5060                │
+│                                    │
+│ ─────────────────────────────────  │
+│ AUDIO TAB:                         │
+│                                    │
+│ Codec:         PCMU (G.711u) ONLY  │
+│                                    │
+└────────────────────────────────────┘
+```
+
+---
+
+## 🏠 If MicroSIP on Different PC
+
+**First, get your Asterisk server IP:**
+```powershell
+ipconfig
+# Example result: 192.168.1.7
+```
+
+**Then change these two fields:**
+```
+SIP Server:    192.168.1.7    ← YOUR IP!
+Domain:        192.168.1.7    ← YOUR IP!
+
+(Everything else stays the same)
+```
+
+---
+
+## ✅ Status Check
+
+After clicking OK, look at MicroSIP:
+
+| Icon | Meaning | Action |
+|------|---------|--------|
+| 🟢 Green | ✅ Registered! | You're good! |
+| 🔴 Red | ❌ Failed | Check settings below |
+| 🟡 Yellow | ⏳ Trying... | Wait 10 seconds |
+
+---
+
+## 🧪 Quick Test
+
+After registration, dial these:
+
+| Number | What It Does |
+|--------|--------------|
+| **999** | Echo test - hear yourself |
+| **1002** | Call other extension |
+
+---
+
+## ⚠️ Most Common Mistakes
+
+| Problem | Fix |
+|---------|-----|
+| Red icon | Check password: `pass1001` (lowercase!) |
+| No audio | Enable PCMU codec, disable all others |
+| Can't reach | Use `localhost` not IP if on same PC |
+| 407 Error | Wrong username/password |
+
+---
+
+## 🔧 Full Settings List
+
+### Extension 1001
+```
+SIP Server:  localhost
+Username:    1001
+Password:    pass1001
+Domain:      localhost
+Login:       1001
+Port:        5060
+Transport:   UDP
+Codec:       PCMU
+```
+
+### Extension 1002
+```
+SIP Server:  localhost
+Username:    1002
+Password:    pass1002
+Domain:      localhost
+Login:       1002
+Port:        5060
+Transport:   UDP
+Codec:       PCMU
+```
+
+---
+
+## 🆘 Emergency Commands
+
+```powershell
+# Is Asterisk running?
+docker ps
+
+# Check if registered
+docker exec -it my-asterisk asterisk -rx "pjsip show endpoints"
+
+# Check logs
+docker logs my-asterisk --tail 20
+
+# Restart Asterisk
+docker restart my-asterisk
+```
+
+---
+
+## ✅ Success = Green Icon + Can Dial 999!
+
+**That's it!** 🎉
