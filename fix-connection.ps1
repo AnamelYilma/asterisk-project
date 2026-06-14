@@ -7,7 +7,7 @@ Write-Host ""
 
 # Get your actual IP address
 Write-Host "🔍 Finding Your Network Configuration..." -ForegroundColor Yellow
-$localIP = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object {$_.IPAddress -notlike "127.*" -and $_.IPAddress -notlike "169.254.*"}).IPAddress | Select-Object -First 1
+$localIP = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { ($_.InterfaceAlias -match 'Wi-Fi' -or $_.InterfaceAlias -match 'Ethernet') -and $_.InterfaceAlias -notmatch 'vEthernet' }).IPAddress | Select-Object -First 1
 $dockerIP = docker inspect my-asterisk --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
 
 Write-Host "   Windows Host IP: $localIP" -ForegroundColor White
