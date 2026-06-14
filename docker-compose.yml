@@ -1,0 +1,26 @@
+version: '3.8'
+#to create image 
+# docker-compose up -d
+#manual code is this : docker run -d --name my-asterisk -p 5060:5060/udp -p 10000-10099:10000-10099/udp -v c:\continer\work\code\asterisk-project\config:/etc/asterisk andrius/asterisk:stable
+
+#docker-compose start my-asterisk
+#docker stop my-asterisk
+#docker restart my-asterisk
+
+services:
+  asterisk:
+    build: .
+    container_name: my-asterisk
+    restart: always
+    network_mode: bridge
+    ports:
+      - "5060:5060/udp"
+      - "10000-10099:10000-10099/udp"
+    volumes:
+      # This syncs your local config folder with the container
+      - ./config:/etc/asterisk
+    # This helps with the "Request Timeout" by making sure the container
+    # knows how to handle external traffic
+    environment:
+      - COLUMNS=80
+      - LINES=24
