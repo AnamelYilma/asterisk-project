@@ -1,154 +1,29 @@
-# Debug Guide
+# 🔍 Troubleshooting Checklist
 
-This file explains how to understand failures in this system.
+If the system is not working, follow these steps in order. Do not skip steps.
 
-## Debug Goal
+### 1. The Docker Layer (Is the box open?)
+*   [ ] Run `docker ps`. Is the container `my-asterisk` showing as "Up"?
+*   [ ] If not, run `docker-compose up -d`.
+*   [ ] Check logs: `docker logs my-asterisk`. Look for "Error" messages.
 
-When something fails, do not guess.
+### 2. The Network Layer (Is the door open?)
+*   [ ] **Port 5060**: Is it mapped? Check your `docker-compose.yml`.
+*   [ ] **Firewall**: Temporarily disable Windows Firewall or add a rule for UDP 5060.
+*   [ ] **IP Address**: Run `ipconfig`. Ensure MicroSIP is trying to connect to the correct IP.
 
-Find which layer failed, then check the file or setting that controls that layer.
+### 3. The Asterisk Layer (Is the brain working?)
+*   [ ] Enter the CLI: `docker exec -it my-asterisk asterisk -rvvv`.
+*   [ ] Type `pjsip show endpoints`. Does it show your users?
+*   [ ] If endpoints are missing, check `config/pjsip.conf` for syntax errors.
 
-## Main Layers To Check
+### 4. The SIP Client Layer (Is the phone set up?)
+*   [ ] Check Username (1001) and Password (pass1001).
+*   [ ] Ensure the Domain/Server is `127.0.0.1` (if on same PC) or your Local IP.
+*   [ ] Ensure Transport is set to **UDP**.
 
-1. Docker layer
-2. Asterisk layer
-3. Config layer
-4. Network layer
-5. SIP client layer
-6. Audio layer
-
-## Common Failure Types
-
-### 1. Docker Does Not Start
-
-Meaning:
-
-- The container is not running
-- The image may not be available
-- Docker Desktop may be stopped
-
-Check:
-
-- Is Docker running?
-- Does `docker ps -a` show the container?
-
-### 2. Asterisk Starts But Config Is Wrong
-
-Meaning:
-
-- Asterisk is running, but settings are wrong
-- A file may have a bad value
-
-Check:
-
-- `pjsip.conf`
-- `extensions.conf`
-- `voicemail.conf`
-- `rtp.conf`
-
-### 3. SIP Client Cannot Register
-
-Meaning:
-
-- Login settings are wrong
-- Transport is wrong
-- Network port is blocked
-
-Check:
-
-- username
-- password
-- endpoint name
-- port 5060 UDP
-
-### 4. Call Connects But No Audio
-
-Meaning:
-
-- SIP signaling works
-- RTP audio is failing
-
-Check:
-
-- RTP port range
-- Docker port mapping
-- firewall rules
-- `rtp.conf`
-
-### 5. Wrong Number Behavior
-
-Meaning:
-
-- The dialplan does not match the number
-- The context does not allow the action
-
-Check:
-
-- `extensions.conf`
-- extension number
-- dial rules
-- context name
-
-### 6. Voicemail Does Not Work
-
-Meaning:
-
-- Mailbox settings are wrong
-- The call never reaches voicemail logic
-
-Check:
-
-- `voicemail.conf`
-- mailbox number
-- password
-- route to voicemail in the dialplan
-
-## Debug Method
-
-Use this order:
-
-1. Confirm Docker is running.
-2. Confirm the container exists and is started.
-3. Confirm the config files are mounted.
-4. Confirm the SIP client credentials.
-5. Confirm the dialplan number.
-6. Confirm the RTP ports.
-
-## How To Think During Debugging
-
-Ask these questions:
-
-- Which part failed?
-- Which file controls that part?
-- Which value is likely wrong?
-- Did the problem start after a change?
-
-## Useful Clues
-
-- Registration problem usually means SIP settings.
-- Call routing problem usually means dialplan settings.
-- No sound usually means RTP or firewall settings.
-- Voicemail problem usually means mailbox or routing settings.
-
-## Clean Debug Rule
-
-One symptom usually belongs to one layer.
-
-Do not mix layers until you know which layer is failing first.
-
-## Repo Focus
-
-For this project, always check these first:
-
-- `config/pjsip.conf`
-- `config/extensions.conf`
-- `config/rtp.conf`
-- Docker port mapping
-
-## Quick Decision Tree
-
-- Cannot log in: check SIP settings
-- Can log in but cannot call: check dialplan
-- Can call but no audio: check RTP
-- Can leave message but voicemail fails: check voicemail config
-- Nothing starts: check Docker
+### 5. Common Symptoms
+*   **Status: Request Timeout**: Usually a Firewall or wrong IP address.
+*   **Status: Forbidden/Unauthorized**: Wrong password or username.
+*   **Connected but No Sound**: Port mapping for RTP (10000-10099) is missing or blocked.
+*   **Call drops immediately**: Check `extensions.conf` to see if the dialplan exists for that number.
