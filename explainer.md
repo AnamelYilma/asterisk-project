@@ -1,53 +1,32 @@
-# System Explainer
+# 🚀 System Architecture Explainer
 
-This document explains how the full system works together in a clean way.
+This document provides a high-level overview of how the Asterisk-Docker system operates.
 
-## Big Picture
+## 1. The Core Layers
 
-The system has four main parts:
+| Layer | Component | Responsibility |
+| :--- | :--- | :--- |
+| **Environment** | Docker | Hosts the Linux system needed for Asterisk on Windows. |
+| **Processing** | Asterisk | The "PBX" engine that connects calls and manages users. |
+| **Definition** | Config Files | `pjsip.conf` (Users) and `extensions.conf` (Dialing Rules). |
+| **Hardware** | MicroSIP | The virtual phone used to make the actual calls. |
 
-1. Docker runs the Asterisk service.
-2. Asterisk handles calls and audio rules.
-3. Config files define behavior.
-4. SIP clients connect to Asterisk and make calls.
+## 2. The Connection Journey
 
-## Main Flow
+1.  **Request**: MicroSIP sends a registration request to the PC's IP.
+2.  **Bridge**: Docker receives this on Port 5060 and "tunnels" it into the container.
+3.  **Auth**: Asterisk checks the config files to see if the user/password is correct.
+4.  **Ready**: Once authorized, the phone is "Registered" and ready to dial.
 
-### 1. Docker Starts Asterisk
+## 3. Why This Design?
 
-Docker creates a running container for Asterisk.
+*   **Portability**: We can move this entire setup to a different computer in minutes.
+*   **Safety**: If Asterisk crashes or has a bad config, it doesn't affect the Windows host.
+*   **Development Speed**: By using **Docker Volumes**, we can edit configuration files in Notepad and see the results immediately in the phone system.
 
-The container is the live environment.
-
-### 2. Asterisk Reads Config Files
-
-Asterisk reads files from `/etc/asterisk` inside the container.
-
-In this repo, those settings come from the local `config` folder mounted into the container.
-
-### 3. SIP Devices Register
-
-A SIP client such as a phone app or softphone connects to Asterisk.
-
-Registration uses the SIP transport and endpoint settings defined in `pjsip.conf`.
-
-### 4. Dialplan Decides What Happens
-
-When a call comes in, the dialplan decides where it goes.
-
-That logic usually lives in `extensions.conf`.
-
-### 5. RTP Carries Audio
-
-After the call is set up, the audio moves over RTP.
-
-RTP ports must be open, or the call may connect without sound.
-
-## Why Docker Is Used
-
-Docker keeps the setup portable.
-
-That means the same Asterisk setup can run on another machine if the config files and ports are correct.
+## 4. Port Usage Summary
+*   **UDP 5060**: Signaling (The "Call Manager").
+*   **UDP 10000-10099**: Media (The "Voice Packets").
 
 ## What Each Part Does
 
