@@ -1,93 +1,29 @@
-# Learn Word Guide
+# 📘 VoIP & Asterisk Glossary
 
-This file teaches the meaning of words used in this system. It is for understanding, not for code.
+This guide explains the technical terms used in this project in simple English.
 
-## Purpose
+### 🏗️ The Infrastructure
+*   **Docker**: A "box" (container) that runs Asterisk. It keeps the software isolated from Windows.
+*   **Image**: A template or "recipe" for creating a container.
+*   **Port Mapping**: Connecting a "door" on your PC to a "door" inside Docker (e.g., PC 5060 -> Docker 5060).
+*   **Volume**: A shared link between a folder on your Windows PC and a folder inside the Docker container.
 
-The goal is to help you read Asterisk and system words clearly.
+### 📞 The Protocol (SIP & RTP)
+*   **SIP (Session Initiation Protocol)**: The "Manager." It handles ringing, hanging up, and registering. Uses **Port 5060**.
+*   **RTP (Real-time Transport Protocol)**: The "Voice." It carries the actual sound of your speech. Uses **Ports 10000-10099**.
+*   **Endpoint**: A "User" or a "Phone" (e.g., MicroSIP is an endpoint).
+*   **Registration**: When a phone "logs in" to Asterisk so Asterisk knows where to find it.
 
-## Main Idea
+### 🧠 The Asterisk Brain
+*   **Dialplan (`extensions.conf`)**: The logic. It tells Asterisk: "If someone dials 999, do THIS."
+*   **Context**: A security group. It defines which numbers a specific user is allowed to call.
+*   **PJSIP**: The modern driver Asterisk uses to talk to SIP phones.
+*   **Codec**: The math used to compress your voice so it can travel over the internet (e.g., ulaw, alaw).
 
-Many files in this project are not random text. Each file has a purpose.
-
-- Some files tell Asterisk how to accept calls.
-- Some files tell Asterisk how to route calls.
-- Some files tell Asterisk how to send audio.
-- Some files tell Asterisk how the system should behave.
-
-## Important Words
-
-### System
-
-A system is a group of parts that work together for one job.
-
-In this project, the system includes Docker, Asterisk, config files, SIP phones, and audio ports.
-
-### Technology
-
-Technology is a tool or method used to solve a problem.
-
-In this project, Docker is technology, Asterisk is technology, and SIP is technology.
-
-### File
-
-A file is a stored set of information.
-
-In this project, config files tell the system what to do.
-
-### Logic
-
-Logic is the rule or decision flow behind behavior.
-
-In this project, logic means how a call enters the system, gets matched, and goes to the right place.
-
-### Purpose
-
-Purpose means the reason something exists.
-
-Example:
-
-- `pjsip.conf` exists to define SIP endpoints and transport.
-- `extensions.conf` exists to define dial behavior.
-- `rtp.conf` exists to define audio media settings.
-
-### Word Meaning In Context
-
-The same word can mean different things in different places.
-
-Examples:
-
-- `endpoint` means a SIP device or client target.
-- `auth` means login details.
-- `aor` means where Asterisk can find the device.
-- `context` means the call rule group used by the dialplan.
-- `transport` means how SIP traffic moves on the network.
-
-## Type Of Things In This System
-
-### Application Layer
-
-This is the part that gives service behavior.
-
-In this project, Asterisk is the application layer.
-
-### Configuration Layer
-
-This layer tells the application how to work.
-
-In this project, the `config` folder is the configuration layer.
-
-### Network Layer
-
-This layer moves messages and audio.
-
-In this project, SIP uses UDP 5060 and audio uses RTP ports.
-
-### Runtime Layer
-
-This is the place where the system is actually running.
-
-In this project, Docker is the runtime container.
+### 🌍 Networking
+*   **NAT**: A way for devices in a private network to talk to the outside world.
+*   **Bind**: Telling the software to stay active on a specific IP or Port.
+*   **UDP**: The type of internet traffic used for phones because it is fast.
 
 ## How To Think About Words
 
