@@ -10,8 +10,8 @@ Write-Host ""
 Write-Host "📍 STEP 1: Finding Your PC IP Address..." -ForegroundColor Yellow
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray
 
-$ip = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { ($_.InterfaceAlias -match 'Wi-Fi' -or $_.InterfaceAlias -match 'Ethernet') -and $_.InterfaceAlias -notmatch 'vEthernet' }).IPAddress | Select-Object -First 1
-
+# $ip = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { ($_.InterfaceAlias -match 'Wi-Fi' -or $_.InterfaceAlias -match 'Ethernet') -and $_.InterfaceAlias -notmatch 'vEthernet' }).IPAddress | Select-Object -First 1
+$ip = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notmatch 'vEthernet|Loopback|Bluetooth|WSL' -and $_.IPAddress -notlike "169.254.*" -and $_.IPAddress -notlike "172.*" -and $_.IPAddress -notlike "127.*" }).IPAddress | Select-Object -First 1
 if ($ip) {
     Write-Host "✅ Your PC IP Address: " -NoNewline -ForegroundColor Green
     Write-Host "$ip" -ForegroundColor White -BackgroundColor DarkGreen
